@@ -21,7 +21,9 @@ def create_recipe():
     except ValueError as e:
         return jsonify({"error": str(e)}), 400
     except Exception as e:
-        return jsonify({"error": "failed to generate recipe", "details": str(e)}), 500
+        return jsonify(
+            {"error": "failed to generate recipe", "details": str(e)}
+                       ), 500
 
 
 @recipes_bp.route("/recipes", methods=["GET"])
@@ -46,6 +48,11 @@ def get_substitutions():
         return jsonify({"error": str(e)}), 400
     except Exception as e:
         return (
-            jsonify({"error": "failed to generate substitutions", "details": str(e)}),
+            jsonify(
+                {
+                    "error": "failed to generate substitutions",
+                    "details": str(e)
+                 }
+                ),
             500,
         )

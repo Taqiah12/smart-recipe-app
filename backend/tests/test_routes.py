@@ -30,14 +30,18 @@ def test_health_returns_ok_status(client):
 def test_post_recipes_returns_200_with_valid_input(client):
     with patch("routes.recipes.save_recipe") as mock_save:
         mock_save.return_value = {"id": 1}
-        response = client.post("/recipes", json={"ingredients": "chicken, pasta"})
+        response = client.post(
+            "/recipes", json={"ingredients": "chicken, pasta"}
+                               )
         assert response.status_code == 200
 
 
 def test_post_recipes_returns_recipe_key(client):
     with patch("routes.recipes.save_recipe") as mock_save:
         mock_save.return_value = {"id": 1}
-        data = client.post("/recipes", json={"ingredients": "chicken"}).get_json()
+        data = client.post(
+            "/recipes", json={"ingredients": "chicken"}
+                           ).get_json()
         assert "recipe" in data
 
 
@@ -82,7 +86,9 @@ def test_get_recipes_returns_recipes_key(client):
 
 def test_get_recipes_returns_a_list(client):
     with patch("routes.recipes.get_all_recipes") as mock_get:
-        mock_get.return_value = [{"ingredients": "eggs", "recipe": "scrambled eggs"}]
+        mock_get.return_value = [
+            {"ingredients": "eggs", "recipe": "scrambled eggs"}
+                                 ]
         data = client.get("/recipes").get_json()
         assert isinstance(data["recipes"], list)
 
@@ -96,7 +102,9 @@ def test_substitutions_returns_200_with_valid_input(client):
 
 
 def test_substitutions_returns_substitutions_key(client):
-    data = client.post("/substitutions", json={"ingredient": "butter"}).get_json()
+    data = client.post(
+        "/substitutions", json={"ingredient": "butter"}
+        ).get_json()
     assert "substitutions" in data
 
 
