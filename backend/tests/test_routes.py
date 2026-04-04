@@ -27,22 +27,36 @@ def test_health_returns_ok_status(client):
 # ── POST /recipes ────────────────────────────────────────────────────
 
 
-def test_post_recipes_returns_200_with_valid_input(client):
-    with patch("routes.recipes.save_recipe") as mock_save:
-        mock_save.return_value = {"id": 1}
-        response = client.post(
-            "/recipes", json={"ingredients": "chicken, pasta"}
-                               )
-        assert response.status_code == 200
+@patch("routes.recipes.generate_recipe")
+@patch("routes.recipes.save_recipe")
+def test_post_recipes_returns_200_with_valid_input(
+    mock_save, mock_generate, client
+):
+    mock_generate.return_value = "mock recipe"
+    mock_save.return_value = {"id": 1}
+
+    response = client.post(
+        "/recipes",
+        json={"ingredients": "chicken, pasta"},
+    )
+
+    assert response.status_code == 200
 
 
-def test_post_recipes_returns_recipe_key(client):
-    with patch("routes.recipes.save_recipe") as mock_save:
-        mock_save.return_value = {"id": 1}
-        data = client.post(
-            "/recipes", json={"ingredients": "chicken"}
-                           ).get_json()
-        assert "recipe" in data
+@patch("routes.recipes.generate_recipe")
+@patch("routes.recipes.save_recipe")
+def test_post_recipes_returns_recipe_key(
+    mock_save, mock_generate, client
+):
+    mock_generate.return_value = "mock recipe"
+    mock_save.return_value = {"id": 1}
+
+    data = client.post(
+        "/recipes",
+        json={"ingredients": "chicken"},
+    ).get_json()
+
+    assert "recipe" in data
 
 
 def test_post_recipes_returns_400_with_empty_body(client):
@@ -60,11 +74,17 @@ def test_post_recipes_returns_error_key_on_400(client):
     assert "error" in data
 
 
-def test_post_recipes_calls_save_recipe(client):
-    with patch("routes.recipes.save_recipe") as mock_save:
-        mock_save.return_value = {"id": 1}
-        client.post("/recipes", json={"ingredients": "eggs"})
-        mock_save.assert_called_once()
+@patch("routes.recipes.generate_recipe")
+@patch("routes.recipes.save_recipe")
+def test_post_recipes_calls_save_recipe(
+    mock_save, mock_generate, client
+):
+    mock_generate.return_value = "mock recipe"
+    mock_save.return_value = {"id": 1}
+
+    client.post("/recipes", json={"ingredients": "eggs"})
+
+    mock_save.assert_called_once()
 
 
 # ── GET /recipes ─────────────────────────────────────────────────────
@@ -88,23 +108,39 @@ def test_get_recipes_returns_a_list(client):
     with patch("routes.recipes.get_all_recipes") as mock_get:
         mock_get.return_value = [
             {"ingredients": "eggs", "recipe": "scrambled eggs"}
-                                 ]
+        ]
         data = client.get("/recipes").get_json()
         assert isinstance(data["recipes"], list)
 
 
-# ── POST /substitutions ───────────────────────────────────────────────
+# ── POST /substitutions ──────────────────────────────────────────────
 
 
-def test_substitutions_returns_200_with_valid_input(client):
-    response = client.post("/substitutions", json={"ingredient": "butter"})
+@patch("routes.recipes.suggest_substitutions")
+def test_substitutions_returns_200_with_valid_input(
+    mock_suggest, client
+):
+    mock_suggest.return_value = ["oil", "margarine"]
+
+    response = client.post(
+        "/substitutions",
+        json={"ingredient": "butter"},
+    )
+
     assert response.status_code == 200
 
 
-def test_substitutions_returns_substitutions_key(client):
+@patch("routes.recipes.suggest_substitutions")
+def test_substitutions_returns_substitutions_key(
+    mock_suggest, client
+):
+    mock_suggest.return_value = ["oil", "margarine"]
+
     data = client.post(
-        "/substitutions", json={"ingredient": "butter"}
-        ).get_json()
+        "/substitutions",
+        json={"ingredient": "butter"},
+    ).get_json()
+
     assert "substitutions" in data
 
 
