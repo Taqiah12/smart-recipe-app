@@ -2,6 +2,7 @@ import pytest
 from unittest.mock import patch
 from app import create_app
 
+
 @pytest.fixture
 def client():
     app = create_app()
@@ -9,17 +10,22 @@ def client():
     with app.test_client() as client:
         yield client
 
+
 # ── Health ───────────────────────────────────────────────────────────
+
 
 def test_health_returns_200(client):
     response = client.get("/health")
     assert response.status_code == 200
 
+
 def test_health_returns_ok_status(client):
     data = client.get("/health").get_json()
     assert data["status"] == "ok"
 
+
 # ── POST /recipes ────────────────────────────────────────────────────
+
 
 def test_post_recipes_returns_200_with_valid_input(client):
     with patch("routes.recipes.save_recipe") as mock_save:
@@ -27,23 +33,28 @@ def test_post_recipes_returns_200_with_valid_input(client):
         response = client.post("/recipes", json={"ingredients": "chicken, pasta"})
         assert response.status_code == 200
 
+
 def test_post_recipes_returns_recipe_key(client):
     with patch("routes.recipes.save_recipe") as mock_save:
         mock_save.return_value = {"id": 1}
         data = client.post("/recipes", json={"ingredients": "chicken"}).get_json()
         assert "recipe" in data
 
+
 def test_post_recipes_returns_400_with_empty_body(client):
     response = client.post("/recipes", json={})
     assert response.status_code == 400
+
 
 def test_post_recipes_returns_400_with_missing_ingredients_key(client):
     response = client.post("/recipes", json={"food": "chicken"})
     assert response.status_code == 400
 
+
 def test_post_recipes_returns_error_key_on_400(client):
     data = client.post("/recipes", json={}).get_json()
     assert "error" in data
+
 
 def test_post_recipes_calls_save_recipe(client):
     with patch("routes.recipes.save_recipe") as mock_save:
@@ -51,7 +62,9 @@ def test_post_recipes_calls_save_recipe(client):
         client.post("/recipes", json={"ingredients": "eggs"})
         mock_save.assert_called_once()
 
+
 # ── GET /recipes ─────────────────────────────────────────────────────
+
 
 def test_get_recipes_returns_200(client):
     with patch("routes.recipes.get_all_recipes") as mock_get:
@@ -59,11 +72,13 @@ def test_get_recipes_returns_200(client):
         response = client.get("/recipes")
         assert response.status_code == 200
 
+
 def test_get_recipes_returns_recipes_key(client):
     with patch("routes.recipes.get_all_recipes") as mock_get:
         mock_get.return_value = []
         data = client.get("/recipes").get_json()
         assert "recipes" in data
+
 
 def test_get_recipes_returns_a_list(client):
     with patch("routes.recipes.get_all_recipes") as mock_get:
@@ -71,19 +86,24 @@ def test_get_recipes_returns_a_list(client):
         data = client.get("/recipes").get_json()
         assert isinstance(data["recipes"], list)
 
+
 # ── POST /substitutions ───────────────────────────────────────────────
+
 
 def test_substitutions_returns_200_with_valid_input(client):
     response = client.post("/substitutions", json={"ingredient": "butter"})
     assert response.status_code == 200
 
+
 def test_substitutions_returns_substitutions_key(client):
     data = client.post("/substitutions", json={"ingredient": "butter"}).get_json()
     assert "substitutions" in data
 
+
 def test_substitutions_returns_400_with_empty_body(client):
     response = client.post("/substitutions", json={})
     assert response.status_code == 400
+
 
 def test_substitutions_returns_error_key_on_400(client):
     data = client.post("/substitutions", json={}).get_json()

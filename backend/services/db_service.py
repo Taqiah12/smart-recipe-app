@@ -3,6 +3,7 @@ from supabase import create_client, Client
 
 _client: Client = None
 
+
 def get_client() -> Client:
     global _client
     if _client is None:
@@ -10,6 +11,7 @@ def get_client() -> Client:
         key = os.getenv("SUPABASE_KEY")
         _client = create_client(url, key)
     return _client
+
 
 def save_recipe(ingredients: str, recipe: str) -> dict:
     client = get_client()
@@ -19,6 +21,7 @@ def save_recipe(ingredients: str, recipe: str) -> dict:
         .execute()
     )
     return response.data[0] if response.data else {}
+
 
 def get_all_recipes() -> list:
     client = get_client()

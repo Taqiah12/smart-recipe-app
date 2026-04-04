@@ -59,6 +59,7 @@ def test_create_recipe_value_error(monkeypatch):
     assert response.status_code == 400
     assert data["error"] == "ingredients are required"
 
+
 def test_create_recipe_unexpected_error(monkeypatch):
     app = create_app()
     client = app.test_client()
@@ -85,14 +86,14 @@ def test_list_recipes_success(monkeypatch):
             "id": 1,
             "ingredients": "chicken, rice",
             "recipe": "Recipe 1",
-            "created_at": "2026-04-04T12:00:00"
+            "created_at": "2026-04-04T12:00:00",
         },
         {
             "id": 2,
             "ingredients": "egg, bread",
             "recipe": "Recipe 2",
-            "created_at": "2026-04-04T13:00:00"
-        }
+            "created_at": "2026-04-04T13:00:00",
+        },
     ]
 
     def mock_get_all_recipes():
@@ -131,7 +132,9 @@ def test_substitutions_success(monkeypatch):
     def mock_suggest_substitutions(ingredient):
         return "Use olive oil, margarine, or yogurt"
 
-    monkeypatch.setattr("routes.recipes.suggest_substitutions", mock_suggest_substitutions)
+    monkeypatch.setattr(
+        "routes.recipes.suggest_substitutions", mock_suggest_substitutions
+    )
 
     response = client.post("/substitutions", json={"ingredient": "butter"})
     data = response.get_json()
@@ -170,13 +173,16 @@ def test_substitutions_value_error(monkeypatch):
     def mock_suggest_substitutions(ingredient):
         raise ValueError("ingredient is required")
 
-    monkeypatch.setattr("routes.recipes.suggest_substitutions", mock_suggest_substitutions)
+    monkeypatch.setattr(
+        "routes.recipes.suggest_substitutions", mock_suggest_substitutions
+    )
 
     response = client.post("/substitutions", json={"ingredient": "   "})
     data = response.get_json()
 
     assert response.status_code == 400
     assert data["error"] == "ingredient is required"
+
 
 def test_substitutions_unexpected_error(monkeypatch):
     app = create_app()
@@ -185,7 +191,9 @@ def test_substitutions_unexpected_error(monkeypatch):
     def mock_suggest_substitutions(ingredient):
         raise Exception("Gemini substitution failed")
 
-    monkeypatch.setattr("routes.recipes.suggest_substitutions", mock_suggest_substitutions)
+    monkeypatch.setattr(
+        "routes.recipes.suggest_substitutions", mock_suggest_substitutions
+    )
 
     response = client.post("/substitutions", json={"ingredient": "milk"})
     data = response.get_json()
