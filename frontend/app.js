@@ -27,6 +27,11 @@ const response = await fetch(`${API_URL}/recipes`, {
       body: JSON.stringify({ ingredients })
     });
 
+
+if (!response.ok) {
+  throw new Error("Server error: " + response.status);
+}
+
     const data = await response.json();
 
     resultDiv.innerHTML = `
