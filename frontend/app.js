@@ -10,8 +10,15 @@ async function getRecipe() {
   resultDiv.classList.remove("hidden");
   resultDiv.innerHTML = "⏳ Generating recipe...";
 
+  const API_URL =
+  window.location.hostname === "localhost"
+    ? "http://localhost:5000"
+    : "https://your-render-url.onrender.com"; // update later
+
+
   try {
-    const response = await fetch("http://localhost:5000/recipes", {
+    
+const response = await fetch(`${API_URL}/recipes`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
