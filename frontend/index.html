@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Smart Recipe App</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="app">
+    <h1>🍳 Smart Recipe Generator</h1>
+    <p class="subtitle">Turn your ingredients into delicious recipes using AI</p>
+
+    <div class="input-box">
+      <input type="text" id="ingredients" placeholder="Enter Ingredients.. (e.g. chicken, pasta, tomato)">
+      <button onclick="getRecipe()">Generate</button>
+      <button onclick="loadRecipes()">📜 View Saved Recipes</button>
+    </div>
+
+    <div id="result" class="card hidden"></div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
