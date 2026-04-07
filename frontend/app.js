@@ -30,13 +30,24 @@ const response = await fetch(`${API_URL}/recipes`, {
       body: JSON.stringify({ ingredients })
     });
 
+
+if (!response.ok) {
+  throw new Error("Server error: " + response.status);
+}
+
     const data = await response.json();
+
+    if (data.error) {
+    resultDiv.innerHTML = data.error;
+    return;
+  }
 
     resultDiv.innerHTML = `
       <h2>🍽 Recipe</h2>
       <p>${data.recipe}</p>
     `;
   } catch (error) {
+    console.error(error); // debugging
     resultDiv.innerHTML = "⚠️ Failed to fetch recipe. Try again.";
   }
 }
@@ -64,6 +75,7 @@ async function loadRecipes() {
     `).join("");
 
   } catch (error) {
+    console.error(error);
     resultDiv.innerHTML = "⚠️ Failed to load recipes.";
   }
 }
