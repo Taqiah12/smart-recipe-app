@@ -91,8 +91,16 @@ button:hover {
   backdrop-filter: blur(10px);
   background: rgba(255, 255, 255, 0.1);
   box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .hidden {
   display: none;
+}
+
+pre {
+  white-space: pre-wrap;  /* wrap lines */
+  word-wrap: break-word;
 }
