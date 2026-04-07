@@ -17,6 +17,9 @@ async function getRecipe() {
   resultDiv.classList.remove("hidden");
   resultDiv.innerHTML = "⏳ Generating recipe...";
 
+
+
+
   try {
     
 const response = await fetch(`${API_URL}/recipes`, {
