@@ -3,6 +3,7 @@ from flask_cors import CORS
 from routes.recipes import recipes_bp
 from config import Config
 
+
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
@@ -15,6 +16,7 @@ def create_app():
         return {"status": "ok"}, 200
 
     return app
+
 
 if __name__ == "__main__":
     app = create_app()
