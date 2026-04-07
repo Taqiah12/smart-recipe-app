@@ -1,0 +1,82 @@
+// Declare API_URL at the top so all functions can use it
+const API_URL =
+  window.location.hostname === "localhost" ||
+  window.location.hostname === "127.0.0.1"
+    ? "http://127.0.0.1:5000"
+    : "https://smart-recipe-app-rpns.onrender.com";
+
+
+async function getRecipe() {
+  const ingredients = document.getElementById("ingredients").value;
+  const resultDiv = document.getElementById("result");
+
+  if (!ingredients) {
+    alert("Please enter ingredients!");
+    return;
+  }
+
+  resultDiv.classList.remove("hidden");
+  resultDiv.innerHTML = "⏳ Generating recipe...";
+
+
+
+
+  try {
+    
+const response = await fetch(`${API_URL}/recipes`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ ingredients })
+    });
+
+
+if (!response.ok) {
+  throw new Error("Server error: " + response.status);
+}
+
+    const data = await response.json();
+
+    if (data.error) {
+    resultDiv.innerHTML = data.error;
+    return;
+  }
+
+    resultDiv.innerHTML = `
+      <h2>🍽 Recipe</h2>
+    <pre>${data.recipe}</pre>
+    `;
+  } catch (error) {
+    console.error(error); // debugging
+    resultDiv.innerHTML = "⚠️ Failed to fetch recipe. Try again.";
+  }
+}
+// Function to load saved recipes
+async function loadRecipes() {
+  const resultDiv = document.getElementById("result");
+
+  resultDiv.classList.remove("hidden");
+  resultDiv.innerHTML = "⏳ Loading saved recipes...";
+
+  try {
+    const res = await fetch(`${API_URL}/recipes`);
+    const data = await res.json();
+
+    if (!data.recipes || data.recipes.length === 0) {
+      resultDiv.innerHTML = "No recipes saved yet.";
+      return;
+    }
+
+    resultDiv.innerHTML = data.recipes.map(r => `
+      <div class="card">
+        <p><b>Ingredients:</b> ${r.ingredients}</p>
+        <pre>${r.recipe}</pre>
+      </div>
+    `).join("");
+
+  } catch (error) {
+    console.error(error);
+    resultDiv.innerHTML = "⚠️ Failed to load recipes.";
+  }
+}
