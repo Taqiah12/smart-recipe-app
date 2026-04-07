@@ -3,7 +3,7 @@ const API_URL =
   window.location.hostname === "localhost" ||
   window.location.hostname === "127.0.0.1"
     ? "http://127.0.0.1:5000"
-    : "https://your-render-url.onrender.com"; // update later
+    : "https://smart-recipe-app-rpns.onrender.com";
 
 
 async function getRecipe() {

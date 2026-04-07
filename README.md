@@ -55,7 +55,7 @@
 # const API_URL =
 #  window.location.hostname === "localhost"
 #    ? "http://localhost:5000"
-#   : "https://your-render-url.onrender.com";
+#   : "https://smart-recipe-app-rpns.onrender.com";
 # ```
 
 ### Testing & Validation
