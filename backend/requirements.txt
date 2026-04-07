@@ -36,10 +36,8 @@ pycparser==3.0
 pydantic==2.12.5
 pydantic_core==2.41.5
 Pygments==2.20.0
-pyiceberg==0.11.1
 PyJWT==2.12.1
 pyparsing==3.3.2
-pyroaring==1.0.4
 pytest==9.0.2
 python-dateutil==2.9.0.post0
 python-dotenv==1.2.2
@@ -62,3 +60,4 @@ websockets==15.0.1
 Werkzeug==3.1.8
 yarl==1.23.0
 zstandard==0.25.0
+google-generativeai==0.8.5
