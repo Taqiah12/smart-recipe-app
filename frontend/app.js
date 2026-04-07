@@ -1,7 +1,8 @@
 // Declare API_URL at the top so all functions can use it
 const API_URL =
-  window.location.hostname === "localhost"
-    ? "http://localhost:5000"
+  window.location.hostname === "localhost" ||
+  window.location.hostname === "127.0.0.1"
+    ? "http://127.0.0.1:5000"
     : "https://your-render-url.onrender.com"; // update later
 
 
@@ -44,7 +45,7 @@ if (!response.ok) {
 
     resultDiv.innerHTML = `
       <h2>🍽 Recipe</h2>
-      <p>${data.recipe}</p>
+    <pre>${data.recipe}</pre>
     `;
   } catch (error) {
     console.error(error); // debugging
