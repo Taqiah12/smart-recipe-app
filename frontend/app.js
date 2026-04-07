@@ -30,7 +30,7 @@ const response = await fetch(`${API_URL}/recipes`, {
 
     resultDiv.innerHTML = `
       <h2>🍽 Recipe</h2>
-      <pre>${data.recipe}</pre>
+      <p>${data.recipe}</p>
     `;
   } catch (error) {
     resultDiv.innerHTML = "⚠️ Failed to fetch recipe. Try again.";
