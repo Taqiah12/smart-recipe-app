@@ -2,13 +2,12 @@ from flask import Flask, send_from_directory
 from flask_cors import CORS
 from routes.recipes import recipes_bp
 from config import Config
-
+import os
 
 def create_app():
     app = Flask(__name__, static_folder='../frontend', static_url_path='')
     app.config.from_object(Config)
     CORS(app)
-
     app.register_blueprint(recipes_bp)
 
     @app.route("/")
@@ -20,7 +19,6 @@ def create_app():
         return {"status": "ok"}, 200
 
     return app
-
 
 if __name__ == "__main__":
     app = create_app()
